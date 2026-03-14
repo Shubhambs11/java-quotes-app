@@ -26,4 +26,5 @@ jobs:
            ${{ vars.DOCKERHUB_USERNAME }}/java-quotes-app:${{github.sha}}
            ${{ vars.DOCKERHUB_USERNAME }}/java-quotes-app:${{github.ref_name}}  
            ${{ vars.DOCKERHUB_USERNAME }}/java-quotes-app:latest
+           
 
