@@ -6,25 +6,35 @@
     <!-- Maven model version -->
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project details -->
+    <!-- Project identification -->
     <groupId>com.example</groupId>
     <artifactId>java-quotes-app</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
-    <!-- Java version -->
+    <!-- Java version used for compilation -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
+    <!-- Maven build configuration -->
+    <build>
+        <plugins>
 
-    <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-    </properties>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
