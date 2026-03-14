@@ -1,7 +1,37 @@
 name: Code Scan
 
 on:
-    workflow_dispatch:
-
+    push:
+        branches: ["master"]
 jobs:
-    
+    validate:
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+          matrix:
+             language: [ 'java' ]
+             # Matrix strategy to scan with multiple Java versions
+             java-version: [ "17", "21", "25" ]
+        
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Java JDK
+              uses: actions/setup-java@v4
+              with:
+                distribution: 'temurin' # Specify a Java distribution
+                java-version: ${{ matrix.java-version }}
+                cache: 'maven' # Caches dependencies for faster builds
+
+            # Initializes the CodeQL tools for the repository
+            - name: Initialize CodeQL
+              uses: github/codeql-action/init@v3
+              with:
+                languages: java
+
+            - name: Autobuild
+              uses: github/codeql-action/autobuild@v3
+      
+            - name: Perform CodeQL Analysis ( Run Security Analysis )
+              uses: github/codeql-action/analyze@v3
