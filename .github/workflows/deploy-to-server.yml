@@ -1,0 +1,47 @@
+name: Deploy to server
+
+on: 
+  workflow_call:
+    
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4
+    
+            - name: SSH to Prod server & create app folder
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                host: ${{ secrets.EC2_SSH_HOST }}
+                username: ${{ secrets.EC2_SSH_USERNAME }}
+                key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+                script: |
+                       echo "Installing required packages and folders"
+                       sudo apt-get update && sudo apt-get install docker.io docker-compose-v2 -y
+                       sudo usermod -aG docker $USER
+                       mkdir -p java-app
+    
+            - name: Copy the docker-compose file
+              uses: appleboy/scp-action@v1
+              with:
+                host: ${{ secrets.EC2_SSH_HOST }}
+                username: ${{ secrets.EC2_SSH_USERNAME }}
+                key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+                source: docker-compose.yml
+                target: ~/java-app
+                    
+            - name: SSH to Prod server & run the app
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                host: ${{ secrets.EC2_SSH_HOST }}
+                username: ${{ secrets.EC2_SSH_USERNAME }} 
+                key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+                script: |
+                       echo "Running App"
+                       export DOCKERHUB_USER=${{ vars.DOCKERHUB_USERNAME }}
+                       export DOCKER_TAG=${{ github.event.workflow_run.head_sha }}
+                       export DOCKER_TAG=${{ github.sha }}
+                       echo ${{ github.sha }}
+                       echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+                       cd ~/java-app && docker compose down && docker compose up -d --build --force-recreate --pull always
