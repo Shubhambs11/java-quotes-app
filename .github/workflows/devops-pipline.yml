@@ -1,0 +1,13 @@
+name: DevOps Pipline
+
+on: 
+    push:
+        branches: [master]
+
+jobs:
+    image-build-push:
+        uses: ./.github/workflows/build-and-push.yml
+
+    deploy-to-sever:
+        needs: [ image-build-push ]
+        uses: ./.github/workflows/deploy-to-server.yml
