@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quote Generator</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#4facfe,#00f2fe);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:10px;
+    text-align:center;
+    width:500px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+#quote{
+    font-size:18px;
+    margin:20px 0;
+    color:#333;
+}
+
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border:none;
+    border-radius:5px;
+    background:#4facfe;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2f80ed;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>💡 Random Quote Generator</h1>
+
+<p id="quote">Click the button to get a quote</p>
+
+<button onclick="getQuote()">New Quote</button>
+
+</div>
+
+<script>
+
+async function getQuote() {
+
+    const response = await fetch("http://localhost:8000/quote");
+
+    const data = await response.json();
+
+    document.getElementById("quote").innerText = data.quote;
+}
+
+</script>
+
+</body>
+</html>
