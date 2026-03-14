@@ -30,5 +30,8 @@ jobs:
               with:
                 languages: java
       
+            - name: Build Project
+              run: mvn -B clean install
+
             - name: Perform CodeQL Analysis ( Run Security Analysis )
               uses: github/codeql-action/analyze@v3
